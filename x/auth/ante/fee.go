@@ -58,6 +58,11 @@ func (dfd DeductFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, _ bool, nex
 	)
 
 	fee := feeTx.GetFee()
+
+	// 检查费用是否为uTURA币
+	if !isUTURA(fee) {
+		return ctx, errorsmod.Wrap(sdkerrors.ErrInvalidCoins, "fee must be in utura")
+	}
 	if execMode != transaction.ExecModeSimulate {
 		fee, priority, err = dfd.txFeeChecker(ctx, tx)
 		if err != nil {
@@ -72,7 +77,14 @@ func (dfd DeductFeeDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, _ bool, nex
 
 	return next(newCtx, tx, false)
 }
-
+func isUTURA(fee sdk.Coins) bool {
+	for _, coin := range fee {
+		if coin.Denom != "utura" {
+			return false
+		}
+	}
+	return true
+}
 func (dfd DeductFeeDecorator) checkDeductFee(ctx sdk.Context, sdkTx sdk.Tx, fee sdk.Coins) error {
 	feeTx, ok := sdkTx.(sdk.FeeTx)
 	if !ok {

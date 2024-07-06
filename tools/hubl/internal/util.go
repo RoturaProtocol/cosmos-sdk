@@ -11,7 +11,7 @@ import (
 
 // getAddressCodecFromConfig returns the address codecs for the given chain name
 func getAddressCodecFromConfig(cfg *config.Config, chainName string) (address.Codec, address.Codec, address.Codec, error) {
-	addressPrefix := "cosmos"
+	addressPrefix := "tura"
 
 	if chainName != config.GlobalKeyringDirName {
 		chainConfig, ok := cfg.Chains[chainName]
@@ -30,14 +30,14 @@ func getAddressCodecFromConfig(cfg *config.Config, chainName string) (address.Co
 
 // getAddressPrefixFromConfig returns the address prefixes for the given chain name
 func getAddressPrefixFromConfig(cfg *config.Config, chainName string) (string, string, string, error) {
+
 	if chainName != config.GlobalKeyringDirName {
 		chainConfig, ok := cfg.Chains[chainName]
 		if !ok {
 			return "", "", "", fmt.Errorf("chain %s not found in config", chainName)
 		}
-
 		return chainConfig.AddressPrefix, fmt.Sprintf("%svaloper", chainConfig.AddressPrefix), fmt.Sprintf("%svalcons", chainConfig.AddressPrefix), nil
 	}
 
-	return "cosmos", "cosmosvaloper", "cosmosvalcons", nil
+	return "tura", "turavaloper", "turavalcons", nil
 }
