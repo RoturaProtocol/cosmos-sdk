@@ -64,8 +64,8 @@ func (m Minter) NextInflationRate(params Params, bondedRatio math.LegacyDec) mat
 	if inflation.LT(params.InflationMin) {
 		inflation = params.InflationMin
 	}
-
-	return inflation
+	return math.LegacyZeroDec()
+	// return inflation
 }
 
 // NextAnnualProvisions returns the annual provisions based on current total
