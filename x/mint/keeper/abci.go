@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"cosmossdk.io/core/event"
+	"cosmossdk.io/math"
 	"cosmossdk.io/x/mint/types"
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
@@ -37,7 +38,14 @@ func (k Keeper) BeginBlocker(ctx context.Context, ic types.InflationCalculationF
 	}
 
 	// update minter's inflation and annual provisions
-	minter.Inflation = ic(ctx, minter, params, bondedRatio)
+	blockHeight := sdk.UnwrapSDKContext(ctx).BlockHeight()
+
+	if blockHeight < 771380 {
+		minter.Inflation = ic(ctx, minter, params, bondedRatio)
+	} else {
+		minter.Inflation = math.LegacyZeroDec() // 设置通胀率为 0
+	}
+	// minter.Inflation = ic(ctx, minter, params, bondedRatio)
 	minter.AnnualProvisions = minter.NextAnnualProvisions(params, totalStakingSupply)
 	if err = k.Minter.Set(ctx, minter); err != nil {
 		return err
