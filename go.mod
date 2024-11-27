@@ -179,6 +179,7 @@ require (
 )
 
 replace (
+	github.com/cometbft/cometbft => github.com/RoturaProtocol/cometbft v1.0.0
 	// use cosmos fork of keyring
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
 	// dgrijalva/jwt-go is deprecated and doesn't receive security updates.
